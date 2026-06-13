@@ -1,0 +1,23 @@
+# Virtual Environment
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Local Data and Datasets (Raw and Processed)
+data/
+src/data/
+
+# Model Files and Binary Artefacts
+saved_models/
+*.pkl
+*.pt
+*.pth
+
+# Application Logs & Caches
+outputs/
+*.log
+.env
+.pytest_cache/
+directory_structure.txt
+repomix-output.xml

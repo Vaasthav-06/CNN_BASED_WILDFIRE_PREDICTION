@@ -1,0 +1,265 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0a0f1a;
+  --surface:  #111827;
+  --surface2: #162032;
+  --border:   #1f2d3d;
+  --text:     #e2e8f0;
+  --muted:    #64748b;
+  --low:      #22c55e;
+  --moderate: #eab308;
+  --high:     #f97316;
+  --extreme:  #ef4444;
+  --accent:   #f97316;
+  --font:     'Inter', system-ui, sans-serif;
+  --drawer-w: 300px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+}
+
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── Navbar ────────────────────────────────────────────────── */
+.navbar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem; height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 1000;
+}
+.navbar-brand {
+  display: flex; align-items: center;
+  gap: 0.6rem; font-size: 1rem;
+  font-weight: 600; letter-spacing: 0.01em;
+}
+.navbar-brand .dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot { 0%,100% { opacity:1 } 50% { opacity:.3 } }
+.navbar-status { font-size: 0.75rem; color: var(--muted); }
+.status-ok  { color: var(--low); }
+.status-deg { color: var(--high); }
+
+/* ── Layout ────────────────────────────────────────────────── */
+.main { display: flex; flex: 1; height: calc(100vh - 56px); overflow: hidden; }
+
+/* ── Map panel ─────────────────────────────────────────────── */
+.map-panel { flex: 1; position: relative; overflow: hidden; }
+.leaflet-container { width: 100%; height: 100%; background: var(--bg); }
+
+/* Map overlay positions */
+.map-overlay-tl {
+  position: absolute; top: 12px; left: 12px;
+  z-index: 800; pointer-events: auto;
+}
+.drawer-overlay {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: var(--drawer-w);
+  z-index: 900;
+  animation: slide-in 0.2s ease;
+}
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0 }
+  to   { transform: translateX(0);   opacity: 1 }
+}
+
+/* ── Layer toggle panel ────────────────────────────────────── */
+.layer-toggle-panel {
+  background: rgba(17,24,39,0.92);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  min-width: 180px;
+  backdrop-filter: blur(8px);
+}
+.layer-toggle-title {
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--muted);
+  margin-bottom: 0.6rem; text-transform: uppercase;
+}
+.layer-toggle-row {
+  display: flex; align-items: center;
+  gap: 0.5rem; cursor: pointer;
+  padding: 0.3rem 0; user-select: none;
+}
+.layer-icon { font-size: 0.9rem; width: 20px; text-align: center; }
+.layer-label { flex: 1; font-size: 0.75rem; color: var(--text); }
+.toggle-switch {
+  width: 30px; height: 16px; border-radius: 8px;
+  position: relative; cursor: pointer;
+  transition: background 0.2s; flex-shrink: 0;
+}
+.toggle-switch.on  { background: var(--accent); }
+.toggle-switch.off { background: var(--border); }
+.toggle-knob {
+  position: absolute; top: 2px; width: 12px; height: 12px;
+  border-radius: 50%; background: #fff;
+  transition: left 0.2s;
+}
+.toggle-switch.on  .toggle-knob { left: 16px; }
+.toggle-switch.off .toggle-knob { left: 2px;  }
+
+/* ── Region drawer ─────────────────────────────────────────── */
+.region-drawer {
+  height: 100%; background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto; display: flex; flex-direction: column;
+}
+.drawer-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem 1.25rem; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--surface); z-index: 10;
+}
+.drawer-name { font-size: 0.95rem; font-weight: 600; }
+.drawer-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+.drawer-close {
+  background: none; border: none; color: var(--muted);
+  cursor: pointer; font-size: 1rem; padding: 0;
+  line-height: 1; transition: color 0.15s;
+}
+.drawer-close:hover { color: var(--text); }
+.drawer-risk-hero {
+  margin: 1rem 1.25rem;
+  padding: 1rem;
+  border: 1px solid; border-radius: 8px;
+  background: var(--bg);
+  text-align: center;
+}
+.drawer-risk-prob { font-size: 2.2rem; font-weight: 700; line-height: 1; }
+.drawer-risk-label { font-size: 0.8rem; font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.drawer-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.drawer-cell { background: var(--bg); padding: 0.75rem 1.25rem; }
+.drawer-cell-label { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; }
+.drawer-cell-value { font-size: 0.8rem; font-weight: 500; }
+.drawer-section { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+.drawer-section-title { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+.bbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.bbox-cell { display: flex; align-items: center; gap: 0.4rem; }
+.bbox-dir  { font-size: 0.65rem; color: var(--muted); font-weight: 700; width: 14px; }
+.bbox-val  { font-size: 0.78rem; font-family: monospace; }
+
+/* ── Pulse ring animation ──────────────────────────────────── */
+.pulse-ring {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 2px solid var(--pulse-color, #f97316);
+  animation: ring-expand 2s ease-out infinite;
+  opacity: 0;
+}
+@keyframes ring-expand {
+  0%   { transform: scale(0.4); opacity: 0.9 }
+  100% { transform: scale(2.2); opacity: 0 }
+}
+
+/* ── Sidebar ───────────────────────────────────────────────── */
+.sidebar {
+  width: 340px; background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto; display: flex; flex-direction: column;
+}
+
+/* Tab bar */
+.tab-bar {
+  display: flex; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10; background: var(--surface);
+}
+.tab-btn {
+  flex: 1; padding: 0.75rem; background: none; border: none;
+  color: var(--muted); font-size: 0.8rem; cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.15s;
+}
+.tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+.tab-btn:hover:not(.active) { color: var(--text); }
+
+.sidebar-section { padding: 1.25rem 1.5rem; }
+.sidebar-section h3 {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
+}
+
+/* Region cards */
+.region-card {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.65rem 0.75rem; border-radius: 6px; margin-bottom: 0.5rem;
+  background: var(--bg); border: 1px solid var(--border);
+  cursor: pointer; transition: border-color 0.15s;
+}
+.region-card:hover { border-color: var(--accent); }
+.region-card.active { border-color: var(--accent); }
+.region-name { font-size: 0.875rem; font-weight: 500; }
+.region-prob { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+.risk-badge {
+  font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem;
+  border-radius: 4px; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.risk-Low      { background: #14532d; color: var(--low); }
+.risk-Moderate { background: #713f12; color: var(--moderate); }
+.risk-High     { background: #7c2d12; color: var(--high); }
+.risk-Extreme  { background: #450a0a; color: var(--extreme); }
+
+/* Legend */
+.legend { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+.legend-title { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.6rem; }
+.legend-row {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.75rem; padding: 0.2rem 0;
+}
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.legend-range { margin-left: auto; color: var(--muted); font-size: 0.7rem; }
+
+/* Prediction form */
+.predict-form { display: flex; flex-direction: column; gap: 0.75rem; }
+.form-row { display: flex; flex-direction: column; gap: 0.25rem; }
+.form-row label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em; }
+.form-row input, .form-row select {
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 0.45rem 0.65rem; border-radius: 4px;
+  font-size: 0.8rem; width: 100%; outline: none; transition: border-color 0.15s;
+}
+.form-row input:focus, .form-row select:focus { border-color: var(--accent); }
+.btn-predict {
+  margin-top: 0.25rem; padding: 0.6rem;
+  background: var(--accent); color: #fff; border: none; border-radius: 4px;
+  font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: opacity 0.15s;
+}
+.btn-predict:hover { opacity: 0.85; }
+.btn-predict:disabled { opacity: 0.4; cursor: not-allowed; }
+.result-box {
+  margin-top: 0.75rem; padding: 1rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+}
+.result-prob { font-size: 2rem; font-weight: 700; line-height: 1; }
+.result-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+.result-meta { font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; }
+.imp-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+.imp-name { font-size: 0.7rem; color: var(--muted); width: 140px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.imp-bar-bg { flex: 1; background: var(--border); border-radius: 2px; height: 4px; }
+.imp-bar-fill { height: 4px; border-radius: 2px; background: var(--accent); }
+.imp-val { font-size: 0.65rem; color: var(--muted); width: 36px; text-align: right; }
+
+.loading { color: var(--muted); font-size: 0.8rem; padding: 0.5rem 0; }
+.error-msg { color: var(--extreme); font-size: 0.75rem; margin-top: 0.5rem; }
+
+/* Leaflet tooltip override */
+.region-tooltip {
+  background: rgba(17,24,39,0.92) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  font-family: var(--font) !important;
+}
+.leaflet-tooltip::before { display: none !important; }

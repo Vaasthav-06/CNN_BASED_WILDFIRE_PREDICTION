@@ -1,0 +1,15 @@
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-dotenv==1.0.1
+pydantic==2.7.1
+numpy==1.26.4
+pandas==2.2.2
+joblib==1.4.2
+scikit-learn==1.4.2
+xgboost==2.0.3
+catboost==1.2.5
+lightgbm==4.3.0
+torch==2.3.0
+torchvision==0.18.0
+pillow==10.3.0
+python-multipart==0.0.9

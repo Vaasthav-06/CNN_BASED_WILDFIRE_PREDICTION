@@ -1,0 +1,38 @@
+# Block Virtual Environments & Caches completely
+venv/
+.venv/
+env/
+__pycache__/
+.ipynb_checkpoints/
+
+# Block Massive Data, Outputs, and Logs
+data/
+outputs/
+saved_models/
+catboost_info/
+WEBSITE/
+.cache.sqlite
+
+# Block non-code binary/heavy extensions explicitly
+*.pkl
+*.pt
+*.npy
+*.npz
+*.sqlite
+*.db
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.pdf
+*.tif
+*.tiff
+*.svg
+
+# Block IDE system preferences
+.git/
+.vscode/
+.idea/
+
+# EXPLICIT WHITELIST: Never ignore these vital root orchestration scripts
+!train_all_models.py
